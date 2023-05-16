@@ -1,0 +1,39 @@
+<div class="wrapper">
+    <div class="chatter">
+        <div *ngFor="let user of users">
+            <app-chat-box (click)="Chat(user.uid)" Name="{{user.username}}" Status="{{user.status}}"></app-chat-box>
+        </div>
+        <div id="utilBar">
+            <div class="icon">
+                <div>
+                    fsn kvudvyh.kxcj
+                    <br>
+                    kejdshieu
+                    <br>
+                    sedjkuhi
+                </div>
+                <i class="fa-solid fa-comments"></i>
+            </div>
+            <div class="icon">
+                <div>
+                    fsn kvudvyh.kxcj
+                    <br>
+                    kejdshieu
+                    <br>
+                    sedjkuhi
+                </div>
+                <i class="fa-solid fa-user"></i>
+            </div>
+        </div>
+    </div>
+    <div  class="chatbox">
+        <div id="messages">
+            <div *ngFor="let msg of msgs">
+                <app-message read="{{msg.isRead}}" date="{{msg.date}}" text="{{msg.message}}" from="{{msg.cuid}}" self="{{msg.isSender}}" time="{{msg.createdS}}"></app-message>
+            </div>
+        </div>
+        <div *ngIf="uid != ''">
+            <app-text-box (OnSend)="SendMsg($event)"></app-text-box>
+        </div>
+    </div>
+</div>

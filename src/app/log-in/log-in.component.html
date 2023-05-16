@@ -1,0 +1,56 @@
+
+<div class="container" id="container">
+<div class="form-container sign-up-container">
+
+<div class="form">
+    <h1>Create Account</h1>
+    <div class="social-container">
+        <a class="social"><i class="fa fa-facebook"></i></a>
+        <a class="social"><i class="fa fa-google"></i></a>
+        <a class="social"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <span>or use your email for registration</span>
+    <input type="text" name="name" placeholder="Name" id="upname">
+    <input type="email" name="email" placeholder="Email" id="upemail">
+    <input type="password" name="password" placeholder="Password" id="uppw">
+    <button (click)="SignUp()">SignUp</button>
+</div>
+</div>
+<div class="form-container sign-in-container">
+    <div class="form">
+        <h1>Sign In</h1>
+        <div class="social-container">
+        <a class="social"><i class="fa fa-facebook"></i></a>
+        <a class="social"><i class="fa fa-google"></i></a>
+        <a class="social"><i class="fa fa-linkedin"></i></a>
+    </div>
+    <span>or use your account</span>
+    <input type="email" name="email" placeholder="Email"id="inemail">
+    <input type="password" name="password" placeholder="Password"id="inpw">
+    <a>Forgot Your Password</a>
+
+    <button (click)="SignIn()">Sign In</button>
+    </div>
+</div>
+<div class="overlay-container">
+    <div class="overlay">
+        <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>To keep connected with us please login with your personal info</p>
+            <button class="ghost" id="signIn" onclick='container.classList.remove("right-panel-active");'>Sign In</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your details and start journey with us</p>
+            <button class="ghost" id="signUp" onclick='container.classList.add("right-panel-active");'>Sign Up</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+
+</script>    

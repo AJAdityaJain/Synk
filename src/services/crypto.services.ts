@@ -37,14 +37,15 @@ export class Cryptography {
   }
 
   encrypt(text:string, key:string):string{
-    return text;crypto.DES.encrypt(text,key).toString();
+    return crypto.AES.encrypt(text,key).toString();
   }
 
   decrypt(text:string, key:string):string{
-    return text;crypto.DES.decrypt(text,key).toString();//crypto.enc.Utf8);
+    return crypto.AES.decrypt(text,key).toString(crypto.enc.Utf8);
   }
 
   hash(text:string):string{
     return crypto.SHA256(text).toString()
   }
+
 }

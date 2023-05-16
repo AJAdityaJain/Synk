@@ -1,0 +1,39 @@
+.wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bg);
+    // position: absolute;
+    // bottom: 0px;
+    // justify-content:space-between;
+}
+
+input{
+    padding: 0;
+    outline: none;
+    border: none;
+    height: 100%;
+    width: 88%;
+    background-color: #00000000;
+    color: var(--font);
+    &::placeholder{
+        font-size: var(--fs2);
+        color: var(--font2);
+    }
+}
+
+.icon{
+    margin-left:1rem;
+    line-height: 45px;
+    text-align: center;
+    min-width: 45px;
+    min-height: 45px;
+    font-size: var(--fs4);
+    color: var(--font);
+}
+
+#move{
+    padding-left: 1rem;
+    flex: 1;
+    // margin-left:auto;
+}

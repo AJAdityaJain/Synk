@@ -1,3 +1,26 @@
-<div class= "wrapper">
-    <div class="content">hoo  few  g ergvc ree ,jmhru ledui h ryefyi7 fyh hhu message works!</div>
+<div *ngIf="Self">
+    <div class="wrapper"style="align-items: end;">
+        <div id="date">{{date}}</div>
+        <div class="meta">
+            <div>{{time}}</div>
+            &nbsp;
+            <div *ngIf="read=='true'"><i class="fa-solid fa-eye"></i></div>
+            <div *ngIf="read!='true'"><i class="fa-solid fa-eye-slash"></i></div>
+        </div>
+        <div>
+            <div class="content right">{{text}}</div>
+        </div>            
+    </div>
+</div>
+<div *ngIf="!Self">
+    <div class= "wrapper"style="align-items: start;">
+        <div id="date">{{date}}</div>
+        <div class="meta">
+            <!-- <div>{{from}}</div> -->
+            <div><!--, -->{{time}}</div>
+        </div>
+        <div>
+            <div class="content left">{{text}}</div>
+        </div>
+    </div>
 </div>

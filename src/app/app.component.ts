@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Instameter';
+  ngOnInit(){
+    localStorage.setItem("g","19");
+    localStorage.setItem("p","4692757");
+  }
 }

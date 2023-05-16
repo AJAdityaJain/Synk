@@ -1,10 +1,37 @@
 .wrapper{
     display:flex;
+    flex-direction: column;
+}
+
+.meta{
+    display:flex;
+    flex-direction: row;    
+    font-size: var(--fs1);
+    color: var(--font2);
 }
 .content{
     padding: 1rem;
     border-radius: 2rem;
+    max-width: 50vw;
+}
+.left{
     border-top-left-radius: 0rem;
     background-color: var(--bg2);
+    background-image: linear-gradient(to top right,var(--bg),var(--bg2));
     color: var(--font);
+    // text-align: left;
+}
+.right{
+    border-top-right-radius: 0rem;
+    background-color: var(--accent);
+    background-image: linear-gradient(to bottom right,var(--accent),var(--accent2));
+    color: var(--font);
+    // text-align: right;
+}
+
+#date{
+    color: var(--base);
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
 }
