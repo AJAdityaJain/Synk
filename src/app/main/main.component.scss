@@ -48,7 +48,7 @@
 
 .icon{
     border-radius: 2rem;
-    background-color: var(--accent);
+    background-color: var(--accent2);
     text-align: center;
     line-height: 45px;
     width: 45px;
@@ -60,15 +60,38 @@
     z-index: 1000;
 
     &>div{
-        background-color: var(--bg3);
-        display: none;
+        padding: 45px;
         position:fixed;
-        bottom: 45px;
+        display: none;
+        bottom: 5px;
         z-index: 10;
+        
+        &>div{
+        border-radius: 1rem;
+        border: var(--bg2) solid 1px;
+        border-bottom-left-radius: 0rem;
+        background-color: var(--bg4);
+
+        &>h6{
+            margin: 0;
+        }
+
+
+        &>input , &>button{
+            padding: 10px;
+            border-radius: 1rem;
+            font-size: var(--fs2);
+            color: var(--font);
+            border: 0;
+            margin: 1rem;
+            margin-top: 0;
+            background-color: var(--bg);
+        }}
     }
 
     &:hover{
         &>div{
         display: block;
-    }}
+        }
+    }
 }

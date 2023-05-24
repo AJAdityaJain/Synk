@@ -1,12 +1,13 @@
 <div class="wrapper">
     <div class="icon">
-        <i class="fa-regular fa-face-smile"></i>
+        <app-emoji-menu Show="{{EmojiMenu?' ':''}}" (onEmoji)="Emoji($event)"></app-emoji-menu>
+        <i class="fa-regular fa-face-smile"  (click)="EmojiMenu=!EmojiMenu"></i>
     </div>
     <div class="icon">
         <i class="fa-solid fa-paperclip"></i>
     </div>
     <div id="move">
-        <input type="text" placeholder="Write something down...">
+        <input id="text" type="text" placeholder="Write something down...">
     </div>
     <div class="icon" (click)="Message()">   
         <i class="fa-solid fa-paper-plane"></i>

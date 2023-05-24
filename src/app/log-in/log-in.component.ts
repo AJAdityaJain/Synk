@@ -12,29 +12,15 @@ import { Data } from 'src/models/Data';
 
 export class LogInComponent {
 
-  constructor(private http:HttpClient, private cr:Cryptography, private router:Router ){
-    // console.log(cr.modpow(1675476,2959741,4692757));
-    // console.log(cr.modpow(564318,3128404 ,4692757));
-  }
+  constructor(private http:HttpClient, private cr:Cryptography, private router:Router ){}
 
-  ngOnInit(){
-    let sid = localStorage.getItem("SID");
-    if(sid != null){
-      this.http.get<Data>('http://localhost:4200/api/User/AutoLoginUser?sid='+sid)
-      .subscribe(data => {
-        if(data.code == "DONE"){
-          this.router.navigateByUrl("/main");
-        }
-      }) 
-    }
-    
-  }
+  
 
   SignIn(){ 
     
     let pw = (document.getElementById("inpw")as HTMLInputElement).value+"";
     let email = (document.getElementById("inemail")as HTMLInputElement).value+"";
-    this.http.get<Data>('http://localhost:4200/api/User/LoginUser?email='+email+'&hash='+this.cr.hash(email.toUpperCase()+pw))
+    this.http.get<Data>('http://localhost:4200/api/User/LoginUser/'+email+'?hash='+this.cr.hash(email.toUpperCase()+pw))
     .subscribe(data => {
       console.log(data);
       if(data.code == "DONE"){

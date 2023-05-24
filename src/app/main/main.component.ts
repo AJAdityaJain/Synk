@@ -20,18 +20,20 @@ export class MainComponent {
   uid:string = "";
 
   constructor(private http:HttpClient,private websocketService: WebsocketService, private cr:Cryptography) {
-    
+  }    
+
+  ngOnInit(){
+
     this.websocketService.connect().subscribe(
       (message) => {
         message = JSON.parse(message);
-        console.log(message);
-        
         if(message.Code == "MSG"){
-          if(this.uid == message.Value.cuid || message.Value.isSender){
-            this.msgs.push(this.ParseMessage(message.Value));
+          if(this.uid == message.Value.cuid || message.Value.isSender){          
+            this.msgs.push(this.ParseMessage(message.Value,message.Value.isSender));
             this.AutoScroll();  
-            if(!message.Value.isSender)
+            if(!message.Value.isSender){
               this.websocketService.sendMessage(new Data("READ",this.uid))
+            }
           }
         }
         else if(message.Code == "READ"){
@@ -47,21 +49,33 @@ export class MainComponent {
         console.error(error);
      }
     );
-  }
 
-  ngOnInit(){
-    this.http.get<Data>("http://localhost:4200/api/Message/GetPrivateChats?sid="+localStorage.getItem("SID")).subscribe(data=>{
+
+    this.http.get<Data>("http://localhost:4200/api/Message/GetPrivateChats/"+localStorage.getItem("SID")).subscribe(data=>{
       this.users = data.value;
       this.users.forEach(e=>{
         KeyHolderService.AddKey(e.uid,e.publicKey);
       })
     })
   }
+  
+  test(e:any){
+    let file : File= e.target.files[0];
+    if (file) {      
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (evt) {
+          console.log(evt.target?.result);
+      }
+      reader.onerror = function (evt) {
+        console.log("ERROR FILE");
+      }
+    }
+  }
 
   Chat(uid:any){
-    let m = new Message()
     this.uid = uid;
-    this.http.get<Data>("http://localhost:4200/api/Message/GetPrivate?sid="+localStorage.getItem("SID")+"&uid="+uid).subscribe(data => {
+    this.http.get<Data>("http://localhost:4200/api/Message/GetPrivate/"+localStorage.getItem("SID")+"?uid="+uid).subscribe(data => {
       this.msgs = data.value;  
       let ps = "";
       let pt = "";
@@ -82,20 +96,25 @@ export class MainComponent {
     });
   }
 
-  ParseMessage(msg:Message){
+  ParseMessage(msg:Message,u?:any){
     msg.created = new Date(Date.parse(msg.created.toString()));
     msg.createdS =  this.formatAMPM(msg.created);//msg.created.getHours() + ":" +  msg.created.getMinutes();
-    msg.message = this.cr.decrypt(msg.message,KeyHolderService.GetKey(msg.cuid).shared.toString())
+    let key = this.cr.getSecrecy(KeyHolderService.GetKey(u==true?msg.uid:msg.cuid).shared,msg.key)
+    msg.message = this.cr.decrypt(msg.message,key.toString())
     return msg
   }
   
-  SendMsg(event:any){
-    let d =  new Data(
-    "DONE",
-    this.cr.encrypt(event,KeyHolderService.GetKey(this.uid).shared.toString()));
+  SendMsg(){    
+    //KeyHolderService.GetKey(this.uid).shared.toString()
+    let key = this.cr.applySecrecy(KeyHolderService.GetKey(this.uid).shared);    
+    let d =  new Data("DONE",
+    this.cr.encrypt(
+    (document.getElementById("move")?.children[0] as HTMLInputElement).value,key[0].toString()));    
     (document.getElementById("move")?.children[0] as HTMLInputElement).value = "";
-    this.http.post<Data>("http://localhost:4200/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid,d).subscribe(data=>{
+    this.http.post<Data>("http://localhost:4200/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid+"&key="+key[1],d).subscribe(data=>{
       // if(data.code == "DONE"){}
+      console.log(data);
+      
     });
   }
 
@@ -119,5 +138,27 @@ export class MainComponent {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
   }
-  
+  AddPerson(){
+    let email = (document.getElementById("newEmail") as HTMLInputElement).value;
+    this.users.forEach(el => {
+      if(el.email == email){
+        this.Chat(el.uid);
+        console.log("End");
+        return;
+      }
+    });
+
+    console.log("No End");
+    
+    this.http.get<Data>("http://localhost:4200/api/User/GetUser/"+email).subscribe(data=>{
+      if(data.code == "DONE"){
+        console.log(data);
+
+        KeyHolderService.AddKey(data.value.uid,data.value.publicKey);
+        
+        this.users.push(data.value);
+        this.Chat(data.value.uid)
+      }
+    })
+  }    
 }

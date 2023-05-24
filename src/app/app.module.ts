@@ -11,8 +11,8 @@ import { LogInComponent } from './log-in/log-in.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MainComponent } from './main/main.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
-import { EmojiComponent } from './emoji/emoji.component';
 import { EmojiMenuComponent } from './emoji-menu/emoji-menu.component';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +22,8 @@ import { EmojiMenuComponent } from './emoji-menu/emoji-menu.component';
     LogInComponent,
     MainComponent,
     ChatBoxComponent,
-    EmojiComponent,
     EmojiMenuComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,

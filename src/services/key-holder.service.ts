@@ -30,11 +30,13 @@ export class KeyHolderService {
   }
 
   private static Update(){
+    console.log(this.keys);
+    
     localStorage.setItem("keys",JSON.stringify(this.keys));
   } 
 
   static AddKey(uid:string,pub:number){
-    if(this.GetKey(uid)==undefined){
+    if(this.GetKey(uid).publicKey == -1){
       this.keys.push(new Key(uid,pub));
     }
     else{
@@ -45,11 +47,12 @@ export class KeyHolderService {
         }
       }
     }
+
     this.Update();
   }
 
   static GetKey(uid:string):Key{
-    let ret = new Key("",0);
+    let ret = new Key("TEST WRONG", -1);
     this.keys.forEach(e=>{
       if(e.uid == uid){
         ret = e;

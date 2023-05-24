@@ -6,23 +6,32 @@
         <div id="utilBar">
             <div class="icon">
                 <div>
-                    fsn kvudvyh.kxcj
-                    <br>
-                    kejdshieu
-                    <br>
-                    sedjkuhi
+                    <div>
+                        <input type="file" (change)="test($event)">
+                    </div>
                 </div>
+                <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <div class="icon">
+                <div>
+                    <div>
+                        <h6>Start a conversation</h6>
+                        <input id="newEmail" type="text" placeholder="Type in a E-Mail...">
+                        <br>
+                        <button (click)="AddPerson()">Talk!</button>    
+                    </div>
+               </div>
                 <i class="fa-solid fa-comments"></i>
             </div>
             <div class="icon">
                 <div>
-                    fsn kvudvyh.kxcj
-                    <br>
-                    kejdshieu
-                    <br>
-                    sedjkuhi
+                    <div>
+                        foo
+                        <br>
+                        foo
+                    </div>
                 </div>
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-user-group"></i>
             </div>
         </div>
     </div>
@@ -33,7 +42,7 @@
             </div>
         </div>
         <div *ngIf="uid != ''">
-            <app-text-box (OnSend)="SendMsg($event)"></app-text-box>
+            <app-text-box (OnSend)="SendMsg()"></app-text-box>
         </div>
     </div>
 </div>
