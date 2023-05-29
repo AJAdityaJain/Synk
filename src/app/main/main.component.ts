@@ -6,6 +6,7 @@ import { Data } from './../../models/Data';
 import { WebsocketService } from 'src/services/websocket.service';
 import { KeyHolderService } from 'src/services/key-holder.service';
 import { Message } from 'src/models/Message';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -18,8 +19,10 @@ export class MainComponent {
   msgs:Message[]=[];
 
   uid:string = "";
+  user:User = new User(); 
 
-  constructor(private http:HttpClient,private websocketService: WebsocketService, private cr:Cryptography) {
+
+  constructor(private http:HttpClient,private websocketService: WebsocketService, private cr:Cryptography,private router:Router) {
   }    
 
   ngOnInit(){
@@ -45,37 +48,50 @@ export class MainComponent {
         }
       },
       (error) => {
-        console.log("Error Websocket Not Connected");
+        this.router.navigateByUrl("../");
+        console.log("Error: Websocket Not Connected");
         console.error(error);
-     }
+      }
     );
 
-
-    this.http.get<Data>("http://localhost:4200/api/Message/GetPrivateChats/"+localStorage.getItem("SID")).subscribe(data=>{
+    this.http.get<Data>("/api/User/GetChatters/"+localStorage.getItem("SID")).subscribe(data=>{
       this.users = data.value;
+      
       this.users.forEach(e=>{
         KeyHolderService.AddKey(e.uid,e.publicKey);
       })
+
+      this.SetUserData()
     })
   }
-  
-  test(e:any){
+
+  SetUserData(){
+    this.http.get<Data>("/api/User/GetUserFromSession/"+localStorage.getItem("SID")).subscribe(data=>{
+      console.log(data);
+    });
+  }
+
+  PFP(e:any){
     let file : File= e.target.files[0];
     if (file) {      
       var reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = function (evt) {
-          console.log(evt.target?.result);
-      }
-      reader.onerror = function (evt) {
-        console.log("ERROR FILE");
+      reader.onload = (evt) => {
+        this.http.patch("/api/User/SetPFP/"+localStorage.getItem("SID"),new Data("DONE",evt.target?.result)).subscribe(e=>{
+        })
       }
     }
   }
 
   Chat(uid:any){
     this.uid = uid;
-    this.http.get<Data>("http://localhost:4200/api/Message/GetPrivate/"+localStorage.getItem("SID")+"?uid="+uid).subscribe(data => {
+    for (let i = 0; i < this.users.length; i++) {
+      if(this.users[i].uid == uid){        
+        this.user = this.users[i];
+        break;
+      }
+    }
+    this.http.get<Data>("/api/Message/GetPrivate/"+localStorage.getItem("SID")+"?uid="+uid).subscribe(data => {
       this.msgs = data.value;  
       let ps = "";
       let pt = "";
@@ -100,22 +116,23 @@ export class MainComponent {
     msg.created = new Date(Date.parse(msg.created.toString()));
     msg.createdS =  this.formatAMPM(msg.created);//msg.created.getHours() + ":" +  msg.created.getMinutes();
     let key = this.cr.getSecrecy(KeyHolderService.GetKey(u==true?msg.uid:msg.cuid).shared,msg.key)
-    msg.message = this.cr.decrypt(msg.message,key.toString())
+    msg.message = this.cr.decrypt(msg.message,key.toString()).replaceAll("$<n>%", "\n");
     return msg
   }
-  
+
   SendMsg(){    
     //KeyHolderService.GetKey(this.uid).shared.toString()
     let key = this.cr.applySecrecy(KeyHolderService.GetKey(this.uid).shared);    
-    let d =  new Data("DONE",
-    this.cr.encrypt(
-    (document.getElementById("move")?.children[0] as HTMLInputElement).value,key[0].toString()));    
-    (document.getElementById("move")?.children[0] as HTMLInputElement).value = "";
-    this.http.post<Data>("http://localhost:4200/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid+"&key="+key[1],d).subscribe(data=>{
-      // if(data.code == "DONE"){}
-      console.log(data);
+    let inp = (document.getElementById("text") as HTMLTextAreaElement);
+    if(inp.value.trim() != ""){
       
-    });
+      let d =  new Data("DONE",this.cr.encrypt(inp.value.replaceAll("\n","$<n>%"), key[0].toString()));    
+      inp.value = "";
+      this.http.post<Data>("/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid+"&key="+key[1],d).subscribe(data=>{
+        // if(data.code == "DONE"){}
+        
+      });
+    }
   }
 
   AutoScroll(){
@@ -143,16 +160,13 @@ export class MainComponent {
     this.users.forEach(el => {
       if(el.email == email){
         this.Chat(el.uid);
-        console.log("End");
         return;
       }
     });
 
-    console.log("No End");
     
-    this.http.get<Data>("http://localhost:4200/api/User/GetUser/"+email).subscribe(data=>{
+    this.http.get<Data>("/api/User/GetUser/"+email).subscribe(data=>{
       if(data.code == "DONE"){
-        console.log(data);
 
         KeyHolderService.AddKey(data.value.uid,data.value.publicKey);
         
