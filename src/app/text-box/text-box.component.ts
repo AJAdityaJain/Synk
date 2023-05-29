@@ -11,11 +11,11 @@ export class TextBoxComponent {
   EmojiMenu = false;
 
   Message(){
-    this.OnSend.next((document.getElementById("text") as HTMLInputElement).value);
+    this.OnSend.next((document.getElementById("text") as HTMLTextAreaElement).value);
   }
 
   Emoji(e:any){
-    var inp =  (document.getElementById("text") as HTMLInputElement);
+    var inp =  (document.getElementById("text") as HTMLTextAreaElement);
     inp.value += e
   }
 }

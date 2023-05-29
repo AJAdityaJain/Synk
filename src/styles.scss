@@ -18,17 +18,43 @@
     --fs3:20px;
     --fs4:25px;
 
+    --gradient:linear-gradient(
+        to bottom right,
+        var(--font) -70%,
+        var(--accent2) 5%,
+        var(--accent) 55%,
+        var(--bg) 150%
+    );
+        // #DBDCD7 -70%,
+        // #B8235A 45%,
+        // #801357 70%,
+        // #3D1635 95%,
+        // #1C1A27 150%
+
 }
 
 *{
     font-family: "Twemoji Country Flags",Montserrat;
     user-select: none;
     outline: none;
-
- }
-
- button{
     transition: .2s ease-in-out 0s;
+
+}
+
+html{
+    background-color: var(--bg);
+}
+
+hr{
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 4px solid var(--accent);
+    margin:0;
+    padding: 0;
+  }
+
+button{
     cursor: pointer;
     &:hover{        
         transform: scale(1.25);
@@ -38,17 +64,23 @@
     }
 }
 
-/* width */
 ::-webkit-scrollbar {
-    width: 20px;
+    width: 4px;
+    height: 4px;
 }
-
-/* Track */
+::-webkit-scrollbar-corner {
+    background: transparent;
+    width: 0;
+    height: 0;
+    border-left: 16px solid var(--bg2);
+    border-top: 16px solid var(--bg2);
+    border-bottom: 16px solid transparent;
+    border-right: 16px solid transparent;
+}
 ::-webkit-scrollbar-track {
     background-color: var(--bg2);
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: var(--accent2); 
     border-radius: 10px;

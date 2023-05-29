@@ -6,5 +6,6 @@ export class User
     email = "";
     hash = "";
     encryptedKey = "";
+    pfp = "";
     publicKey = 0;
 }

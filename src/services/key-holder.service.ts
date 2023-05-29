@@ -29,9 +29,7 @@ export class KeyHolderService {
     }
   }
 
-  private static Update(){
-    console.log(this.keys);
-    
+  private static Update(){    
     localStorage.setItem("keys",JSON.stringify(this.keys));
   } 
 

@@ -8,15 +8,19 @@
     // justify-content:space-between;
 }
 
-input{
-    padding: 0;
+textarea{
+    margin: 0;
     outline: none;
     border: none;
-    height: 100%;
-    width: 88%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 40px;
+    width: 100%;
     background-color: #00000000;
     color: var(--font);
+    font-size: var(--fs4);
     &::placeholder{
+        line-height: 40px;
         font-size: var(--fs2);
         color: var(--font2);
     }

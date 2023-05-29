@@ -1,41 +1,23 @@
 <div class="wrapper">
     <div class="chatter">
-        <div *ngFor="let user of users">
-            <app-chat-box (click)="Chat(user.uid)" Name="{{user.username}}" Status="{{user.status}}"></app-chat-box>
-        </div>
-        <div id="utilBar">
-            <div class="icon">
-                <div>
-                    <div>
-                        <input type="file" (change)="test($event)">
-                    </div>
-                </div>
-                <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <div class="icon">
-                <div>
-                    <div>
-                        <h6>Start a conversation</h6>
-                        <input id="newEmail" type="text" placeholder="Type in a E-Mail...">
-                        <br>
-                        <button (click)="AddPerson()">Talk!</button>    
-                    </div>
-               </div>
-                <i class="fa-solid fa-comments"></i>
-            </div>
-            <div class="icon">
-                <div>
-                    <div>
-                        foo
-                        <br>
-                        foo
-                    </div>
-                </div>
-                <i class="fa-solid fa-user-group"></i>
-            </div>
+        <app-chat-box Src="../../assets/icon.png" Name="Synk" Status="Stay in Sync"></app-chat-box>
+        <hr width="200%">
+        <br>
+
+        <div id="list" *ngFor="let user of users">
+            <app-chat-box (click)="Chat(user.uid)" PFP="{{user.pfp}}" Name="{{user.username}}" Status="{{user.status}}"></app-chat-box>
         </div>
     </div>
     <div  class="chatbox">
+        <div *ngIf="uid != ''" id="topBar">
+            <app-chat-box  (click)="Chat(user.uid)" PFP="{{user.pfp}}" Name="{{user.username}}" Status="{{user.status}}"></app-chat-box>       
+            <div>
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+                <i class="fa-solid fa-video"></i>
+            </div>
+        </div>
         <div id="messages">
             <div *ngFor="let msg of msgs">
                 <app-message read="{{msg.isRead}}" date="{{msg.date}}" text="{{msg.message}}" from="{{msg.cuid}}" self="{{msg.isSender}}" time="{{msg.createdS}}"></app-message>
@@ -44,5 +26,41 @@
         <div *ngIf="uid != ''">
             <app-text-box (OnSend)="SendMsg()"></app-text-box>
         </div>
+    </div>
+    <div id="utilBar">
+        <div class="br"></div>
+        <div class="icon">
+            <div>
+                <div>
+                    <label for="imgupload">
+                        <img src="data:image/jpeg;base64,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">
+                    </label>
+                    <input class="img" id="imgupload" type="file" (change)="PFP($event)">
+                </div>
+            </div>
+            <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <div class="icon">
+            <div>
+                <div>
+                    <h6>Start a conversation</h6>
+                    <input id="newEmail" type="text" placeholder="Type in a E-Mail...">
+                    <br>
+                    <button (click)="AddPerson()">Talk!</button>    
+                </div>
+           </div>
+            <i class="fa-solid fa-comments"></i>
+        </div>
+        <div class="icon">
+            <div>
+                <div>
+                    foo
+                    <br>
+                    foo
+                </div>
+            </div>
+            <i class="fa-solid fa-user-group"></i>
+        </div>
+
     </div>
 </div>

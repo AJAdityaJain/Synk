@@ -20,7 +20,7 @@ export class LogInComponent {
     
     let pw = (document.getElementById("inpw")as HTMLInputElement).value+"";
     let email = (document.getElementById("inemail")as HTMLInputElement).value+"";
-    this.http.get<Data>('http://localhost:4200/api/User/LoginUser/'+email+'?hash='+this.cr.hash(email.toUpperCase()+pw))
+    this.http.get<Data>('/api/User/LoginUser/'+email+'?hash='+this.cr.hash(email.toUpperCase()+pw))
     .subscribe(data => {
       console.log(data);
       if(data.code == "DONE"){
@@ -54,7 +54,7 @@ export class LogInComponent {
     console.log(publickey);
     console.log(user);
     
-    this.http.post<Data>('http://localhost:4200/api/User/CreateUser',user)
+    this.http.post<Data>('/api/User/CreateUser',user)
     .subscribe(data => {
       console.log(data);
       

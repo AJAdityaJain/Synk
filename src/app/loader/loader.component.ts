@@ -11,10 +11,18 @@ import { Data } from 'src/models/Data';
 export class LoaderComponent {
   constructor(private http:HttpClient,  private router:Router ){}
   ngOnInit(){
+    fetch('https://corporatebs-generator.sameerkumar.website/').then(function (response) {
+      // The API call was successful!
+      return response.json();
+    }).then(function (data) {
+      (document.getElementById("phrase") as HTMLSpanElement).innerText =  (data.phrase);
+    }).catch(function (err) {
+      console.warn('Something went wrong.', err);
+    });
     let redirect = "/signup"
     let sid = localStorage.getItem("SID");
     if(sid != null){
-      this.http.get<Data>('http://localhost:4200/api/User/AutoLoginUser/'+sid)
+      this.http.get<Data>('/api/User/AutoLoginUser/'+sid)
       .subscribe(data => {
         if(data.code == "DONE"){
           redirect = "/main";
