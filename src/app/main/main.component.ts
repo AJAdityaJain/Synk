@@ -25,6 +25,33 @@ export class MainComponent {
   constructor(private http:HttpClient,private websocketService: WebsocketService, private cr:Cryptography,private router:Router) {
   }    
 
+  Open(name:string){
+
+    let divs = document.getElementsByClassName("utildivs");
+
+    for (let i = 0; i < divs.length; i++) {
+      const div = divs[i] as HTMLDivElement;
+      if(div.id != name && div){
+        div.style.opacity = "0";
+        div.style.display = "none"
+      }
+      else{
+        if(div.style.display == "block"){
+          div.style.opacity = "0";
+          div.style.display = "none"
+  
+        }
+        else{
+          div.style.opacity = "1";
+          div.style.display = "block"
+  
+        }
+        
+      }
+    }
+
+  }
+
   ngOnInit(){
 
     this.websocketService.connect().subscribe(
@@ -48,40 +75,27 @@ export class MainComponent {
         }
       },
       (error) => {
-        this.router.navigateByUrl("../");
+        this.router.navigateByUrl("/error");
         console.log("Error: Websocket Not Connected");
         console.error(error);
       }
     );
 
     this.http.get<Data>("/api/User/GetChatters/"+localStorage.getItem("SID")).subscribe(data=>{
+      if(data.code == "DONE"){
       this.users = data.value;
       
       this.users.forEach(e=>{
         KeyHolderService.AddKey(e.uid,e.publicKey);
       })
+      }
+      else if(data.code == "ERRO"){
+        this.router.navigateByUrl("/error")
+      }
 
-      this.SetUserData()
     })
   }
 
-  SetUserData(){
-    this.http.get<Data>("/api/User/GetUserFromSession/"+localStorage.getItem("SID")).subscribe(data=>{
-      console.log(data);
-    });
-  }
-
-  PFP(e:any){
-    let file : File= e.target.files[0];
-    if (file) {      
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (evt) => {
-        this.http.patch("/api/User/SetPFP/"+localStorage.getItem("SID"),new Data("DONE",evt.target?.result)).subscribe(e=>{
-        })
-      }
-    }
-  }
 
   Chat(uid:any){
     this.uid = uid;
@@ -92,6 +106,7 @@ export class MainComponent {
       }
     }
     this.http.get<Data>("/api/Message/GetPrivate/"+localStorage.getItem("SID")+"?uid="+uid).subscribe(data => {
+      if(data.code == "DONE"){
       this.msgs = data.value;  
       let ps = "";
       let pt = "";
@@ -108,7 +123,11 @@ export class MainComponent {
           this.msgs[i].createdS = "";
         }
       }
-        this.AutoScroll()
+        this.AutoScroll()}
+        else if(data.code == "ERRO"){
+          this.router.navigateByUrl("/error")
+        }
+  
     });
   }
 
@@ -129,8 +148,11 @@ export class MainComponent {
       let d =  new Data("DONE",this.cr.encrypt(inp.value.replaceAll("\n","$<n>%"), key[0].toString()));    
       inp.value = "";
       this.http.post<Data>("/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid+"&key="+key[1],d).subscribe(data=>{
-        // if(data.code == "DONE"){}
-        
+        if(data.code == "DONE"){}
+        else if(data.code == "ERRO"){
+          this.router.navigateByUrl("/error")
+        }
+  
       });
     }
   }
@@ -144,7 +166,7 @@ export class MainComponent {
       catch(err){}
     },10)
   }
-  
+
   formatAMPM(date:Date) :string{
     var hours = date.getHours();
     var minutes:string|number = date.getMinutes();
@@ -172,7 +194,10 @@ export class MainComponent {
         
         this.users.push(data.value);
         this.Chat(data.value.uid)
+      }      else if(data.code == "ERRO"){
+        this.router.navigateByUrl("/error")
       }
+
     })
   }    
 }

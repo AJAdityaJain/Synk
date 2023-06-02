@@ -1,0 +1,35 @@
+.wrapper{
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+
+
+    &>div{
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
+    
+    input{
+        margin-bottom: 5px;
+    }
+
+    img{
+        border-radius: 48px;
+        width: 67px;
+        height: 67px;
+        object-fit:cover;
+    }
+
+    button{
+        border-radius: 3px;
+    }
+
+    #imgupload{
+        
+        width: 0;
+        height: 0;
+        display: none;
+    }        
+}

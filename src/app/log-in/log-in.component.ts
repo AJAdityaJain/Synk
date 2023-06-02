@@ -20,7 +20,7 @@ export class LogInComponent {
     
     let pw = (document.getElementById("inpw")as HTMLInputElement).value+"";
     let email = (document.getElementById("inemail")as HTMLInputElement).value+"";
-    this.http.get<Data>('/api/User/LoginUser/'+email+'?hash='+this.cr.hash(email.toUpperCase()+pw))
+    this.http.get<Data>('/api/User/LoginUser/'+email+'?pw='+pw)
     .subscribe(data => {
       console.log(data);
       if(data.code == "DONE"){
@@ -28,6 +28,10 @@ export class LogInComponent {
         localStorage.setItem("SID",data.value.sid)
         this.router.navigateByUrl("/main");
       }
+      else if(data.code == "ERRO"){
+        this.router.navigateByUrl("/error")
+      }
+
     })    
   }
 
@@ -47,7 +51,7 @@ export class LogInComponent {
     user.publicKey = publickey;
     user.username = (document.getElementById("upname")as HTMLInputElement).value+"";
     user.email = (document.getElementById("upemail")as HTMLInputElement).value+"";
-    user.hash = this.cr.hash(user.email.toUpperCase()+pw);
+    user.hash = pw;
 
     
     console.log(privatekey,g,p);
@@ -58,8 +62,12 @@ export class LogInComponent {
     .subscribe(data => {
       console.log(data);
       
-      if(data.code == "DONE")
+      if(data.code == "DONE"){
         localStorage.setItem("SID",data.value)
+      }
+      else if(data.code == "ERRO"){
+        this.router.navigateByUrl("/error")
+      }
     })
   }
 }

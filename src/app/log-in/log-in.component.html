@@ -10,9 +10,9 @@
         <a class="social"><i class="fa fa-linkedin"></i></a>
     </div>
     <span>or use your email for registration</span>
-    <input type="text" name="name" placeholder="Name" id="upname">
-    <input type="email" name="email" placeholder="Email" id="upemail">
-    <input type="password" name="password" placeholder="Password" id="uppw">
+    <input type="text" autocomplete="name" name="name" placeholder="Name" id="upname">
+    <input type="email" autocomplete="email" name="email" placeholder="Email" id="upemail">
+    <input type="password" autocomplete="new-password" name="password" placeholder="Password" id="uppw">
     <button (click)="SignUp()">SignUp</button>
 </div>
 </div>
@@ -25,8 +25,8 @@
         <a class="social"><i class="fa fa-linkedin"></i></a>
     </div>
     <span>or use your account</span>
-    <input type="email" name="email" placeholder="Email"id="inemail">
-    <input type="password" name="password" placeholder="Password"id="inpw">
+    <input type="email" name="email" autocomplete="email" placeholder="Email"id="inemail">
+    <input type="password" name="password" autocomplete="current-password" placeholder="Password"id="inpw">
     <a>Forgot Your Password</a>
 
     <button (click)="SignIn()">Sign In</button>

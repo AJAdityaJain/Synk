@@ -9,18 +9,19 @@
 }
 
 textarea{
+    padding-top: 10px;
     margin: 0;
     outline: none;
     border: none;
     overflow-x: hidden;
     overflow-y: auto;
-    height: 40px;
+    height: 30px;
     width: 100%;
     background-color: #00000000;
     color: var(--font);
     font-size: var(--fs4);
     &::placeholder{
-        line-height: 40px;
+        line-height: 30px;
         font-size: var(--fs2);
         color: var(--font2);
     }

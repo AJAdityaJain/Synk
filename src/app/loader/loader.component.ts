@@ -27,6 +27,9 @@ export class LoaderComponent {
         if(data.code == "DONE"){
           redirect = "/main";
         }
+        else if(data.code == "ERRO"){
+          redirect = "/error"
+        }
       }) 
     }
     

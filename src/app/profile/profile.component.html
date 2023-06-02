@@ -1,0 +1,19 @@
+<div class="wrapper">
+    <div>
+        <label for="imgupload">
+            <img id="pfp" src="">
+        </label>
+        <input id="imgupload" type="file" (change)="PFP($event)">
+
+        <input id="profilename" type="text" value="{{user.username}}" placeholder="Name">
+        <input id="profilestatus" type="text" value="{{user.status}}" placeholder="Status">
+        <button (click)="NAME()">Update Details</button>
+
+    </div>
+    <div>
+        <input type="email" value="{{user.email}}" readonly="true">
+        <input id="profileoldPw" type="password" autocomplete="current-password" placeholder="Old Password">
+        <input id="profilenewPw" type="password" autocomplete="new-password" placeholder="New Password">
+        <button (click)="PW()">Change Passwords</button>    
+    </div>            
+</div>

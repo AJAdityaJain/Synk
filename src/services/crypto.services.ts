@@ -8,7 +8,7 @@ import * as crypto from "crypto-js";
 export class Cryptography {
   IV = crypto.enc.Utf8.parse("dawg");
 
-  constructor() { }
+  constructor() {}
   
   applySecrecy(x:number):number[]{
     let p = Number.parseInt(""+localStorage.getItem("p"));
@@ -59,7 +59,7 @@ export class Cryptography {
 }).toString(crypto.enc.Utf8);
   }
 
-  hash(text:string):string{
+  deprecated_hash(text:string):string{
     return crypto.SHA256(text).toString()
   }
 

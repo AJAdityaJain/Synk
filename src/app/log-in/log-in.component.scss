@@ -44,29 +44,11 @@ a {
 }
 
 button {
-	border-radius: 20px;
-	border: 0px solid var(--base);
-	background: var(--accent);
-	color: var(--font);
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
-}
-
-button:active {
-	transform: scale(0.95);
-}
-
-button:focus {
-	outline: none;
+	font-size: var(--fs2);
 }
 
 button.ghost {
 	background-color: var(--bg2);
-	border-color: var(--bg2);//
 }
 
 .form {
@@ -81,16 +63,9 @@ button.ghost {
 }
 
 input {
-	background-color: var(--bg);
-	border: none;
 	padding: 12px 15px;
 	margin: 8px 0;
 	width: 100%;
-	color: var(--font);
-
-	&::placeholder{
-		color: var(--font2);
-	}
 }
 
 

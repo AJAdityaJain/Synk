@@ -14,9 +14,9 @@
     flex-direction: row;
     justify-content: right;
     &>button{
+        padding: 0;
+        border-radius: 0;
         background-color: var(--bg);
-        outline: none;
-        border: none;
         width: 11.12%;
         font-size: var(--fs4);
     }

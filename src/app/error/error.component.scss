@@ -1,0 +1,35 @@
+.wrapper{
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    background-color: #202125;
+    // background-image: url(https://i.imgur.com/lSt1P.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+    &>img{
+        margin-top: 10%;
+        scale: 1.5;
+        content: var(--gradient);
+        mask-image: url( ../../assets/error.png);
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        
+    }
+
+    &>button{
+        margin-top: 3rem;
+        font-size: var(--fs3);
+    }
+
+    &>span{
+        margin-top: 1rem;
+        font-weight: bold;
+        font-size: var(--fs3);
+        color: var(--font);
+    }
+}

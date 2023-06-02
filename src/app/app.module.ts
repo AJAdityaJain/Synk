@@ -13,6 +13,8 @@ import { MainComponent } from './main/main.component';
 import { ChatBoxComponent } from './chat-box/chat-box.component';
 import { EmojiMenuComponent } from './emoji-menu/emoji-menu.component';
 import { LoaderComponent } from './loader/loader.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { LoaderComponent } from './loader/loader.component';
     ChatBoxComponent,
     EmojiMenuComponent,
     LoaderComponent,
+    ProfileComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
