@@ -83,14 +83,20 @@ export class MainComponent {
 
     this.http.get<Data>("/api/User/GetChatters/"+localStorage.getItem("SID")).subscribe(data=>{
       if(data.code == "DONE"){
+        console.log(data);
+        
       this.users = data.value;
       
       this.users.forEach(e=>{
+        console.log(e);
+        
         KeyHolderService.AddKey(e.uid,e.publicKey);
       })
       }
       else if(data.code == "ERRO"){
-        this.router.navigateByUrl("/error")
+        alert(console);
+        console.log(data.value);
+        // this.router.navigateByUrl("/error")
       }
 
     })
@@ -125,7 +131,8 @@ export class MainComponent {
       }
         this.AutoScroll()}
         else if(data.code == "ERRO"){
-          this.router.navigateByUrl("/error")
+          alert("GETPRIVCAT")
+          // this.router.navigateByUrl("/error")
         }
   
     });
@@ -140,17 +147,17 @@ export class MainComponent {
   }
 
   SendMsg(){    
-    //KeyHolderService.GetKey(this.uid).shared.toString()
     let key = this.cr.applySecrecy(KeyHolderService.GetKey(this.uid).shared);    
     let inp = (document.getElementById("text") as HTMLTextAreaElement);
     if(inp.value.trim() != ""){
       
       let d =  new Data("DONE",this.cr.encrypt(inp.value.replaceAll("\n","$<n>%"), key[0].toString()));    
       inp.value = "";
-      this.http.post<Data>("/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid+"&key="+key[1],d).subscribe(data=>{
+      this.http.post<Data>("/api/Message/SendPrivate?sid="+localStorage.getItem("SID")+"&uid="+this.uid+"&key="+key[1].toString(),d).subscribe(data=>{
         if(data.code == "DONE"){}
         else if(data.code == "ERRO"){
-          this.router.navigateByUrl("/error")
+          alert("main:158");
+          // this.router.navigateByUrl("/error")
         }
   
       });
@@ -178,7 +185,7 @@ export class MainComponent {
     return strTime;
   }
   AddPerson(){
-    let email = (document.getElementById("newEmail") as HTMLInputElement).value;
+    let email = (document.getElementById("newEml") as HTMLInputElement).value;
     this.users.forEach(el => {
       if(el.email == email){
         this.Chat(el.uid);
@@ -194,7 +201,8 @@ export class MainComponent {
         
         this.users.push(data.value);
         this.Chat(data.value.uid)
-      }      else if(data.code == "ERRO"){
+      }      
+      else if(data.code == "ERRO"){
         this.router.navigateByUrl("/error")
       }
 

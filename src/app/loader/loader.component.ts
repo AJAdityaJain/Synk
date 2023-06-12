@@ -22,18 +22,29 @@ export class LoaderComponent {
     let redirect = "/signup"
     let sid = localStorage.getItem("SID");
     if(sid != null){
-      this.http.get<Data>('/api/User/AutoLoginUser/'+sid)
+      redirect = "/error"
+      this.http.get<Data>('/api/User/AutoLogin/'+sid)
       .subscribe(data => {
+        console.log(data);
+        
         if(data.code == "DONE"){
           redirect = "/main";
         }
         else if(data.code == "ERRO"){
           redirect = "/error"
         }
+        else{
+          redirect = "/signup"
+        }
       }) 
     }
     
     setTimeout(() => {
+      if(redirect == "/signup"){
+        localStorage.removeItem("pk");
+        localStorage.removeItem("SID");
+        localStorage.removeItem("userData");
+      }
       this.router.navigateByUrl(redirect);
     }, 2000);
   }}

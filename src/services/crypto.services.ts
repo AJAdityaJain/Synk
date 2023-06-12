@@ -1,27 +1,86 @@
 import { Injectable } from '@angular/core';
 import * as crypto from "crypto-js";
 
+
+export class MergeKey{
+  
+  keys:number[] = [];
+
+  generate(n:number){
+    let p = Number.parseInt(localStorage.getItem("p")+"");
+
+    for (let i = 0; i < n; i++) {
+      this.keys.push(Math.floor(Math.random() *  p));
+    }
+  }
+
+  duplicate(){
+    let r  = new MergeKey();
+    this.keys.forEach(e=>r.keys.push(e));
+    return r;
+  }
+
+  fromString(s:string){
+    this.keys = [];
+    let ss = s.split("_");
+    ss.forEach(e=>{
+      if(e.length > 0){
+        this.keys.push(Number.parseInt(e));
+      }
+    })
+  }
+
+  toString(){
+    let s = "";
+    this.keys.forEach(e=>{
+      s+="_"+e.toString()
+    });
+    return s;
+  }
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class Cryptography {
   IV = crypto.enc.Utf8.parse("dawg");
 
-  constructor() {}
+  constructor() {    
+  }
   
-  applySecrecy(x:number):number[]{
+  applySecrecy(x:MergeKey):MergeKey[]{
     let p = Number.parseInt(""+localStorage.getItem("p"));
-    let y = Math.floor(Math.random()*p);
-    return [this.modpow(y,x,p),y];
+    let y = new MergeKey();
+    y.generate(16);
+    return [this.modpowM(y,x,p),y];
   }
 
-  getSecrecy(x:number, key:number):number{
+  getSecrecy(x:MergeKey, key:MergeKey):MergeKey{
     let p = Number.parseInt(""+localStorage.getItem("p"));
-    return this.modpow(key,x,p);
+    return this.modpowM(key,x,p);
   }
   
-  modpow(x:number, n:number, mod?:number) :number {
+  modpowM(x:MergeKey|number, n:MergeKey, mod?:number) :MergeKey {
+    let nd = n.duplicate();
+    if(!(typeof x == 'number')){
+      for (let i = 0; i < x.keys.length; i++) {
+        nd.keys[i] = this._modpow(x.keys[i],nd.keys[i],mod)
+      }
+    }
+    else{
+      console.log((x), "NOOOOOOOOOOOOOO DUUUUUUDE");
+      
+      for (let i = 0; i < n.keys.length; i++) {
+        nd.keys[i] = this._modpow(x,nd.keys[i],mod);
+      }
+    }
+
+    return nd;
+  }
+  
+  _modpow(x:number, n:number, mod?:number) :number {
+    
     let bigX = BigInt(x);
     let bigN = BigInt(n);  
     if (mod) {
@@ -49,6 +108,8 @@ export class Cryptography {
     }
   }
 
+
+
   encrypt(text:string, key:string):string{
     return crypto.AES.encrypt(text,key,{iv:this.IV,
 }).toString();
@@ -58,6 +119,8 @@ export class Cryptography {
     return crypto.AES.decrypt(text,key,{iv:this.IV,
 }).toString(crypto.enc.Utf8);
   }
+
+
 
   deprecated_hash(text:string):string{
     return crypto.SHA256(text).toString()

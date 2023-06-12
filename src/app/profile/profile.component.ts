@@ -1,4 +1,4 @@
-import { Cryptography } from 'src/services/crypto.services';
+import { Cryptography, MergeKey } from 'src/services/crypto.services';
 import { User } from 'src/models/User';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
@@ -15,26 +15,42 @@ export class ProfileComponent {
   user:User;
 
   constructor(private http:HttpClient, private router:Router ,private cr:Cryptography){
-    this.user = JSON.parse(localStorage.getItem("userData")+"");
+    this.user= new User();
   }
 
+  largePFP(){
+    this.http.get<Data>("/api/User/GetPFPLarge/"+localStorage.getItem("SID")+"?uid="+this.user.uid).subscribe(data=>{
+      (document.getElementById("pfp")as HTMLImageElement).src = ("data:image/jpeg;base64,"+data.value);      
+    })
+  }
+  
   ngOnInit(){
     (document.getElementById("pfp")as HTMLImageElement).src = "data:image/jpeg;base64,"+ this.user.pfp;
     
-    if(localStorage.getItem("userData") == undefined){
-      this.SetUserData()
-    }
+    setTimeout(() => {
+      console.log("ERROR SPREE");
+      
+      if(localStorage.getItem("userData") == undefined){
+        this.SetUserData()
+      }        
+      else{
+        this.user = JSON.parse(localStorage.getItem("userData")+"");
+        (document.getElementById("pfp")as HTMLImageElement).src = "data:image/jpeg;base64,"+ this.user.pfp;
+      }
+    }, 1000);
   }
 
   
   SetUserData(){
-    this.http.get<Data>("/api/User/GetUserFromSession/"+localStorage.getItem("SID")).subscribe(data=>{
+    this.http.get<Data>("/api/User/GetFromSession/"+localStorage.getItem("SID")).subscribe(data=>{
       if(data.code == "DONE"){
         localStorage.setItem("userData",JSON.stringify(data.value));
-        this.user = JSON.parse(localStorage.getItem("userData")+"");
+        this.user = data.value;
         (document.getElementById("pfp")as HTMLImageElement).src = "data:image/jpeg;base64,"+ this.user.pfp;
       }
       else if(data.code == "ERRO"){
+        console.log(data);
+        
         this.router.navigateByUrl("/error")
       }
 
@@ -49,8 +65,6 @@ export class ProfileComponent {
     
     this.http.patch<Data>("/api/User/UpdateDetails/"+localStorage.getItem("SID")+'?name='+name+'&status='+status,null).subscribe(data=>{
       if(data.code == "DONE"){
-        console.log(122324);
-        
         this.SetUserData()
       }
       else if(data.code == "ERRO"){

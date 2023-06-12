@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Cryptography } from './crypto.services';
+import { Cryptography, MergeKey } from './crypto.services';
 
 var crypt = new Cryptography()
 
 class Key{
   uid:string = "";
-  publicKey:Number = 0;
-  shared:number = 0;
+  publicKey:MergeKey;
+  shared:MergeKey;
 
-  constructor(uid:string ,publicKey:number){
+  constructor(uid:string ,publicKey:MergeKey){
     this.uid = uid;
     this.publicKey = publicKey;
-    this.shared = crypt.modpow(publicKey,Number.parseInt(localStorage.getItem("pk")+""),Number.parseInt(localStorage.getItem("p")+""));
+    let priv = new MergeKey();
+    priv.fromString((localStorage.getItem("pk")+""));        
+    this.shared = crypt.modpowM(publicKey,priv,Number.parseInt(localStorage.getItem("p")+""));
   }
 }
 
@@ -33,8 +35,10 @@ export class KeyHolderService {
     localStorage.setItem("keys",JSON.stringify(this.keys));
   } 
 
-  static AddKey(uid:string,pub:number){
-    if(this.GetKey(uid).publicKey == -1){
+  static AddKey(uid:string,pub:MergeKey){
+    if(this.GetKey(uid).publicKey.keys.length == 0){
+      console.log(pub);
+      
       this.keys.push(new Key(uid,pub));
     }
     else{
@@ -50,7 +54,7 @@ export class KeyHolderService {
   }
 
   static GetKey(uid:string):Key{
-    let ret = new Key("TEST WRONG", -1);
+    let ret = new Key("TEST WRONG", new MergeKey());
     this.keys.forEach(e=>{
       if(e.uid == uid){
         ret = e;

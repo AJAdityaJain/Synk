@@ -1,10 +1,10 @@
 <div class="wrapper">
     <div>
-        <label for="imgupload">
-            <img id="pfp" src="">
-        </label>
-        <input id="imgupload" type="file" (change)="PFP($event)">
-
+        <div>
+            <img id="pfp" src="" (click)="largePFP()">
+            <label for="imgupload"><i class="fa-solid fa-pen-to-square"></i></label>
+            <input id="imgupload" type="file" (change)="PFP($event)">
+        </div>
         <input id="profilename" type="text" value="{{user.username}}" placeholder="Name">
         <input id="profilestatus" type="text" value="{{user.status}}" placeholder="Status">
         <button (click)="NAME()">Update Details</button>

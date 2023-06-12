@@ -1,3 +1,5 @@
+import { MergeKey } from "src/services/crypto.services";
+
 export class User
 {
     uid = "";
@@ -7,5 +9,5 @@ export class User
     hash = "";
     encryptedKey = "";
     pfp = "";
-    publicKey = 0;
+    publicKey: MergeKey = new MergeKey;
 }
